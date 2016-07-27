@@ -51,7 +51,7 @@ module Phantomjs
         FileUtils.mkdir_p temp_dir
 
         Dir.chdir temp_dir do
-          unless system "curl -L -O #{package_url}" or system "wget #{package_url}"
+          unless system "curl -L --retry 5 -O #{package_url}" or system "wget -t 5 #{package_url}"
             raise "\n\nFailed to load phantomjs! :(\nYou need to have cURL or wget installed on your system.\nIf you have, the source of phantomjs might be unavailable: #{package_url}\n\n"
           end
 
@@ -98,7 +98,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://s3.amazonaws.com/base-phantomjs/phantomjs-2.0.0-linux-x86_64.tar.bz2'
+          'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.0.0-linux-x86_64.tar.bz2'
         end
       end
     end
@@ -130,7 +130,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://s3.amazonaws.com/base-phantomjs/phantomjs-2.0.0-macosx.zip'
+          'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.0.0-macosx.zip'
         end
       end
     end
@@ -149,7 +149,7 @@ module Phantomjs
           if system_phantomjs_installed?
             system_phantomjs_path
           else
-            File.expand_path File.join(Phantomjs.base_dir, platform, 'phantomjs.exe')
+            File.expand_path File.join(Phantomjs.base_dir, platform, 'bin', 'phantomjs.exe')
           end
         end
 
